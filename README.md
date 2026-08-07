@@ -1,0 +1,1 @@
+# pulumi-kind-go-gitops
