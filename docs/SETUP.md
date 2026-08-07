@@ -39,7 +39,7 @@ Argo CD will reconcile workloads from this repo. Initialize it **once** on GitHu
 ```bash
 APPS_REPO=pulumi-kind-go-gitops-apps
 mkdir -p /tmp/$APPS_REPO && cd /tmp/$APPS_REPO
-git init -b main
+git init -b master
 mkdir -p apps/nginx
 
 # Copy the manifests from this repo
@@ -63,7 +63,7 @@ pulumi stack init dev  # if you don't already have one
 
 pulumi config set clusterName "kind-pulumi-gitops"
 pulumi config set githubRepo "https://github.com/raihankhan/pulumi-kind-go-gitops-apps.git"
-pulumi config set githubBranch main
+pulumi config set githubBranch master
 pulumi config set ingressClass nginx
 pulumi config set argocdDomain argocd.local
 ```

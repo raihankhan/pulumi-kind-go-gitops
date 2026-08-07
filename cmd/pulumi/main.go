@@ -125,7 +125,7 @@ func loadConfig(pCtx *pulumi.Context) (deployCtx, error) {
 	}
 	branch := cfg.Get("githubBranch")
 	if branch == "" {
-		branch = "main"
+		branch = "master"
 	}
 	class := cfg.Get("ingressClass")
 	if class == "" {

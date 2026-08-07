@@ -39,7 +39,7 @@ fi
 # program defaults to kind-pulumi-gitops, so explicitly set it here.
 pulumi config set clusterName "kind-$CLUSTER_NAME"
 pulumi config set githubRepo "${GITHUB_APPS_REPO:-https://github.com/raihankhan/pulumi-kind-go-gitops-apps.git}"
-pulumi config set githubBranch "${GITHUB_APPS_BRANCH:-main}"
+pulumi config set githubBranch "${GITHUB_APPS_BRANCH:-master}"
 pulumi config set ingressClass "${INGRESS_CLASS:-nginx}"
 pulumi config set argocdDomain "${ARGOCD_DOMAIN:-argocd.local}"
 

@@ -46,7 +46,7 @@ spec:
   programRefs:
     - name: <repo-name>
       repoURL: https://github.com/<org>/<repo>
-      commit: main
+      commit: master
   backend: file:///pulumi-operator/state
   config:
     secrets:

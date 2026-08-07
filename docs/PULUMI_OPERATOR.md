@@ -40,7 +40,7 @@ spec:
     programRefs:
       - name: my-stack-program
         repoURL: https://github.com/<org>/<repo>
-        commit: main
+        commit: master
   backend: file:///pulumi-operator/state
   config:
     secrets:

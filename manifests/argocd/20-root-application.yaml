@@ -15,7 +15,7 @@ spec:
   project: platform
   source:
     repoURL: https://github.com/raihankhan/pulumi-kind-go-gitops-apps.git
-    targetRevision: main
+    targetRevision: master
     path: apps
     directory:
       recurse: true
