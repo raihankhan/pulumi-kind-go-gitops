@@ -1,0 +1,12 @@
+# Namespace for the Pulumi Kubernetes Operator.
+# Kept as a separate file so it can be applied before Helm-installed CRDs.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pulumi-kubernetes-operator
+  labels:
+    app.kubernetes.io/name: pulumi-kubernetes-operator
+    app.kubernetes.io/part-of: pulumi
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: baseline

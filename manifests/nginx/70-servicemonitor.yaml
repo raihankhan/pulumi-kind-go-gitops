@@ -1,0 +1,20 @@
+# ServiceMonitor for Prometheus Operator. Optional; only consumed if a
+# `kube-prometheus-stack` is installed in `monitoring`. Validated by Argo CD
+# with `kubectl apply --validate=false`.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: nginx
+  namespace: nginx
+  labels:
+    app.kubernetes.io/name: nginx
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nginx
+  endpoints:
+    - port: metrics
+      interval: 30s
+      scrapeTimeout: 10s
+      path: /metrics

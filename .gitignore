@@ -24,9 +24,14 @@ profile.cov
 go.work
 go.work.sum
 
-# env file
-.env
+# Build artifacts
+/bin/
 
-# Editor/IDE
+# Pulumi
+.pulumi/
+Pulumi.*.yaml
+!Pulumi.yaml
+
+
 # .idea/
 # .vscode/

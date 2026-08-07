@@ -1,0 +1,57 @@
+# AppProject scopes Argo CD Applications to one set of GitHub repos and a list
+# of permitted target clusters + namespaces. The App-of-Apps pattern enforces
+# least privilege by listing each app explicitly instead of using wildcards.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd
+    app.kubernetes.io/component: appproject
+spec:
+  description: "Local kind platform workloads managed via GitOps."
+  sourceRepos:
+    - "https://github.com/raihankhan/pulumi-kind-go-gitops-apps"
+    - "https://github.com/raihankhan/pulumi-kind-go-gitops"
+  destinations:
+    - namespace: "nginx"
+      server: "https://kubernetes.default.svc"
+    - namespace: "argocd"
+      server: "https://kubernetes.default.svc"
+    - namespace: "monitoring"
+      server: "https://kubernetes.default.svc"
+  clusterResourceWhitelist:
+    - group: ""
+      kind: "Namespace"
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: "ConfigMap"
+    - group: ""
+      kind: "Secret"
+    - group: ""
+      kind: "Service"
+    - group: ""
+      kind: "ServiceAccount"
+    - group: "apps"
+      kind: "Deployment"
+    - group: "apps"
+      kind: "StatefulSet"
+    - group: "autoscaling"
+      kind: "HorizontalPodAutoscaler"
+    - group: "networking.k8s.io"
+      kind: "Ingress"
+    - group: "policy"
+      kind: "PodDisruptionBudget"
+    - group: "monitoring.coreos.com"
+      kind: "ServiceMonitor"
+  orphanedResources:
+    warn: true
+  roles:
+    - name: developer
+      description: "Read-only access for engineers"
+      policies:
+        - p, proj:platform:developer, applications, get, platform/*, allow
+        - p, proj:platform:developer, applications, sync, platform/*, allow
+      groups:
+        - developers

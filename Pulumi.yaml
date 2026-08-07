@@ -1,0 +1,11 @@
+name: pulumi-kind-go-gitops
+runtime:
+  name: go
+description: Production-shaped local kind platform with Pulumi Operator, Argo CD, and nginx GitOps deployment.
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: kubernetes-go
+      environment: local
+      managed-by: pulumi
+      gitops: argocd

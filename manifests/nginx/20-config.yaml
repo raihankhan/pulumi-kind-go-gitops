@@ -1,0 +1,59 @@
+# ConfigMap containing a production-shaped nginx.conf: gzip, security
+# headers, hide version, and Prometheus exporter sidecar wiring via the
+# `metrics` port in the deployment.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: nginx
+  labels:
+    app.kubernetes.io/name: nginx
+data:
+  default.conf: |
+    server {
+      listen 8080;
+      server_name _;
+      server_tokens off;
+
+      # Security headers
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+      # Compression
+      gzip on;
+      gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+      gzip_min_length 1024;
+
+      location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ =404;
+      }
+
+      location /healthz {
+        access_log off;
+        return 200 "ok\n";
+      }
+
+      location = /50x.html {
+        root /usr/share/nginx/html;
+      }
+    }
+  index.html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <title>kind + Pulumi + Argo CD</title>
+        <style>
+          :root { color-scheme: dark light; }
+          body { font: 16px/1.6 system-ui, sans-serif; max-width: 640px; margin: 4rem auto; padding: 0 1rem; }
+          code { background: rgba(127,127,127,.15); padding: .1em .35em; border-radius: .25rem; }
+        </style>
+      </head>
+      <body>
+        <h1>kind + Pulumi + Argo CD</h1>
+        <p>This nginx deployment was reconciled from Git via Argo CD. Served by <code>nginx:1.27-alpine</code>.</p>
+      </body>
+    </html>

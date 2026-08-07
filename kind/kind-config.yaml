@@ -1,0 +1,59 @@
+# kind cluster configuration for local development with Pulumi Operator + Argo CD
+# Reference: https://kind.sigs.k8s.io/docs/user/configuration/
+#
+# This configuration is intentionally production-shaped:
+#   - 3 control-plane + 3 worker nodes for HA-style topology
+#   - Port mappings so the host can reach NodePort and Ingress services
+#   - Local registry hook so we can `kind load docker-image` without re-pulling
+#   - Disable default CNI so we can install Cilium OR keep kindnet (we keep kindnet)
+#
+# Only the control-plane node exposes NodePort 80/443 and 30000-30010 range.
+apiVersion: kind.x-k8s.io/v1alpha4
+kind: Cluster
+name: pulumi-gitops
+featureGates:
+  "GracefulNodeShutdown": false
+networking:
+  ipFamily: ipv4
+  apiServerAddress: 127.0.0.1
+  apiServerPort: 6443
+  disableDefaultCNI: false
+  podSubnet: "10.244.0.0/16"
+  serviceSubnet: "10.96.0.0/16"
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.30.0
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP
+      # Argo CD webhook / NodePort range
+      - containerPort: 30000
+        hostPort: 30000
+        protocol: TCP
+      - containerPort: 30001
+        hostPort: 30001
+        protocol: TCP
+      - containerPort: 30002
+        hostPort: 30002
+        protocol: TCP
+    extraMounts:
+      - hostPath: /var/run/docker.sock
+        containerPath: /var/run/docker.sock
+  - role: control-plane
+    image: kindest/node:v1.30.0
+  - role: control-plane
+    image: kindest/node:v1.30.0
+  - role: worker
+    image: kindest/node:v1.30.0
+  - role: worker
+    image: kindest/node:v1.30.0
+  - role: worker
+    image: kindest/node:v1.30.0
+containerdConfigPatches:
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5001"]
+      endpoint = ["http://kind-registry:5000"]

@@ -1,0 +1,12 @@
+# Argo CD namespace. The Helm-managed install (in the Pulumi program) will
+# detect this namespace and finalize RBAC/CRDs without conflict.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+  labels:
+    app.kubernetes.io/name: argocd
+    app.kubernetes.io/part-of: argocd
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: baseline

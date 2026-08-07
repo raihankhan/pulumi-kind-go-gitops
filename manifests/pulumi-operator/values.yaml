@@ -1,0 +1,30 @@
+# Default values for the Pulumi Kubernetes Operator Helm chart.
+# Chart: https://github.com/pulumi/pulumi-kubernetes-operator
+# Docs: https://www.pulumi.com/docs/using-pulumi/kubernetes-operator/
+operator:
+  installCRDs: true
+  leaderElection: true
+  logLevel: info
+image:
+  repository: pulumi/pulumi-kubernetes-operator
+  tag: v2.5.0
+  pullPolicy: IfNotPresent
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+env:
+  - name: WATCH_NAMESPACE
+    value: ""
+  - name: POD_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+  - name: OPERATOR_NAME
+    value: pulumi-kubernetes-operator
+nodeSelector: {}
+tolerations: []
+affinity: {}
